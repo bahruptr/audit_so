@@ -327,11 +327,9 @@ export default function App() {
         return;
       }
 
-      // Build 2D Array with Headers & Data
       const aoaData = [headers, ...rows];
       const worksheet = window.XLSX.utils.aoa_to_sheet(aoaData);
 
-      // Auto-fit Column Widths
       const colWidths = headers.map((h, colIdx) => {
         let maxLen = String(h).length;
         rows.forEach(row => {
@@ -347,7 +345,6 @@ export default function App() {
       const workbook = window.XLSX.utils.book_new();
       window.XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
       
-      // Write Native XLSX file
       window.XLSX.writeFile(workbook, filename);
     } catch (err) {
       console.error('Error generating Excel file:', err);
@@ -355,7 +352,7 @@ export default function App() {
     }
   };
 
-  // 1. Download Master Template (Point 1-9 dengan Kolom 'No' di Kolom A)
+  // 1. Download Master Template with Column 'No'
   const handleDownloadMasterTemplate = () => {
     const headers = [
       'No',
@@ -379,11 +376,10 @@ export default function App() {
     downloadNativeExcel('Master Data', headers, rows, 'Template_Master_Data.xlsx');
   };
 
-  // 2. Download Native Qty System Template (Point 10 dengan Kolom 'No' di Kolom A)
+  // 2. Download Qty System Template with Column 'No'
   const handleDownloadQtyTemplate = () => {
     const headers = ['No', 'SKU Variasi', 'Qty System', 'Isi Per Karung'];
     
-    // Gunakan seluruh SKU yang ada di Master Data dengan nomor urut di kolom terdepan
     const rows = masterStock.map((item, index) => [
       index + 1,
       item.sku,
@@ -394,7 +390,6 @@ export default function App() {
     downloadNativeExcel('Qty System', headers, rows, 'Template_Qty_Stok.xlsx');
   };
 
-  // Helper Sanitizer for Sheet Header matching
   const cleanKey = (key) => key ? String(key).trim().toLowerCase().replace(/[^a-z0-9]/g, '') : '';
   
   const parseNumber = (val) => {
@@ -1282,7 +1277,7 @@ export default function App() {
           </div>
         )}
 
-        {/* ------------------ TAB 4: EXCEL TEMPLATES & IMPORT/EXPORT ------------------ */}
+        {/* ------------------ TAB 4: STYLED EXCEL TEMPLATES & IMPORT/EXPORT ------------------ */}
         {activeTab === 'export' && (
           <div className="max-w-4xl mx-auto space-y-6">
             
@@ -1358,7 +1353,7 @@ export default function App() {
 
               <div className="flex bg-slate-900 p-1 rounded-xl border border-slate-700 mb-4">
                 <button
-                  onClick={() => setImportMode('master')}
+                  onClick={() => importMode('master')}
                   className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
                     importMode === 'master'
                       ? 'bg-blue-600 text-white shadow-md'
